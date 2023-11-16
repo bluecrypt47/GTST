@@ -17,10 +17,14 @@ class userManagement
 
     public function getListUsers()
     {
-        $query = "SELECT * FROM users, roles WHERE users.idRole = roles.idRole ORDER BY idUser";
-        $result = $this->db->select($query);
+        try {
+            $query = "SELECT * FROM users, roles WHERE users.idRole = roles.idRole ORDER BY idUser";
+            $result = $this->db->select($query);
 
-        return $result;
+            return $result;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function addUser($name, $phoneNumber, $email, $idRole, $username, $password, $rePassword)
@@ -33,94 +37,102 @@ class userManagement
         $password = $this->format->validate($password);
         $rePassword = $this->format->validate($rePassword);
 
-        if ($name == '' || $email == '' || $username == '' || $password == '') {
-            $msg = "<span class='text-danger'>No empty!</span>";
-            return $msg;
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $msg = "<span class='text-danger'>Email not valid!!</span>";
-            return $msg;
-        } elseif ($password != $rePassword) {
-            $msg = "<span class='text-danger'>The retype password not match!</span>";
-            return $msg;
-        }
-
-        if ($phoneNumber != NULL) {
-            if (strlen($phoneNumber) < 9 || strlen($phoneNumber) > 10) {
-                $msg = "<span class='text-danger'>The phone number must be from 9 to 10 numbers!</span>";
+        try {
+            if ($name == '' || $email == '' || $username == '' || $password == '') {
+                $msg = "<span class='text-danger'>No empty!</span>";
                 return $msg;
-            } elseif (!filter_var($phoneNumber, FILTER_SANITIZE_NUMBER_INT)) {
-                $msg = "<span class='text-danger'>The phone number must be the number!</span>";
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $msg = "<span class='text-danger'>Email not valid!!</span>";
+                return $msg;
+            } elseif ($password != $rePassword) {
+                $msg = "<span class='text-danger'>The retype password not match!</span>";
                 return $msg;
             }
 
-            $uppercase = preg_match('@[A-Z]@', $password);
-            $lowercase = preg_match('@[a-z]@', $password);
-            $number    = preg_match('@[0-9]@', $password);
-            $specialChars = preg_match('@[^\w]@', $password);
+            if ($phoneNumber != NULL) {
+                if (strlen($phoneNumber) < 9 || strlen($phoneNumber) > 10) {
+                    $msg = "<span class='text-danger'>The phone number must be from 9 to 10 numbers!</span>";
+                    return $msg;
+                } elseif (!filter_var($phoneNumber, FILTER_SANITIZE_NUMBER_INT)) {
+                    $msg = "<span class='text-danger'>The phone number must be the number!</span>";
+                    return $msg;
+                }
 
-            if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
-                $msg = "<span class='text-danger'>Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character!</span>";
-                return $msg;
-            } else {
-                $checkUsername = "SELECT * FROM `users` WHERE username = '$username' OR email = '$email'";
-                $rsCheck = $this->db->select($checkUsername);
+                $uppercase = preg_match('@[A-Z]@', $password);
+                $lowercase = preg_match('@[a-z]@', $password);
+                $number    = preg_match('@[0-9]@', $password);
+                $specialChars = preg_match('@[^\w]@', $password);
 
-                if ($rsCheck) {
-                    $msg = "<span class='text-danger'>Username or Email exists!</span>";
+                if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
+                    $msg = "<span class='text-danger'>Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character!</span>";
                     return $msg;
                 } else {
-                    $password = md5($password);
-                    $query = "INSERT INTO users(`idRole`, `name`, `email`, `phoneNumber`, `username`, `password`) VALUES ('$idRole','$name','$email','$phoneNumber','$username','$password')";
-                    $result = $this->db->insert($query);
+                    $checkUsername = "SELECT * FROM `users` WHERE username = '$username' OR email = '$email'";
+                    $rsCheck = $this->db->select($checkUsername);
 
-                    if ($result != false) {
-
-                        echo '<script language="javascript">alert("Add User Successfully!"); window.location="userList.php";</script>';
-                    } else {
-                        $msg = "<span class='text-danger'>Add user fail!</span>";
+                    if ($rsCheck) {
+                        $msg = "<span class='text-danger'>Username or Email exists!</span>";
                         return $msg;
+                    } else {
+                        $password = md5($password);
+                        $query = "INSERT INTO users(`idRole`, `name`, `email`, `phoneNumber`, `username`, `password`) VALUES ('$idRole','$name','$email','$phoneNumber','$username','$password')";
+                        $result = $this->db->insert($query);
+
+                        if ($result != false) {
+
+                            echo '<script language="javascript">alert("Add User Successfully!"); window.location="userList.php";</script>';
+                        } else {
+                            $msg = "<span class='text-danger'>Add user fail!</span>";
+                            return $msg;
+                        }
+                    }
+                }
+            } else {
+                $uppercase = preg_match('@[A-Z]@', $password);
+                $lowercase = preg_match('@[a-z]@', $password);
+                $number = preg_match('@[0-9]@', $password);
+                $specialChars = preg_match('@[^\w]@', $password);
+
+                if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
+                    $msg = "<span class='text-danger'>Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character!</span>";
+                    return $msg;
+                } else {
+                    $checkUsername = "SELECT * FROM `users` WHERE username = '$username' OR email = '$email'";
+                    $rsCheck = $this->db->select($checkUsername);
+
+                    if ($rsCheck) {
+                        $msg = "<span class='text-danger'>Username or Email exists!</span>";
+                        return $msg;
+                    } else {
+                        $password = md5($password);
+                        $query = "INSERT INTO users(`idRole`, `name`, `email`, `phoneNumber`, `username`, `password`) VALUES ('$idRole','$name','$email','$phoneNumber','$username','$password')";
+                        $result = $this->db->insert($query);
+
+                        if ($result != false) {
+
+                            echo '<script language="javascript">alert("Add User Successfully!"); window.location="userList.php";</script>';
+                        } else {
+                            $msg = "<span class='text-danger'>Add user fail!</span>";
+                            return $msg;
+                        }
                     }
                 }
             }
-        } else {
-            $uppercase = preg_match('@[A-Z]@', $password);
-            $lowercase = preg_match('@[a-z]@', $password);
-            $number = preg_match('@[0-9]@', $password);
-            $specialChars = preg_match('@[^\w]@', $password);
-
-            if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
-                $msg = "<span class='text-danger'>Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character!</span>";
-                return $msg;
-            } else {
-                $checkUsername = "SELECT * FROM `users` WHERE username = '$username' OR email = '$email'";
-                $rsCheck = $this->db->select($checkUsername);
-
-                if ($rsCheck) {
-                    $msg = "<span class='text-danger'>Username or Email exists!</span>";
-                    return $msg;
-                } else {
-                    $password = md5($password);
-                    $query = "INSERT INTO users(`idRole`, `name`, `email`, `phoneNumber`, `username`, `password`) VALUES ('$idRole','$name','$email','$phoneNumber','$username','$password')";
-                    $result = $this->db->insert($query);
-
-                    if ($result != false) {
-
-                        echo '<script language="javascript">alert("Add User Successfully!"); window.location="userList.php";</script>';
-                    } else {
-                        $msg = "<span class='text-danger'>Add user fail!</span>";
-                        return $msg;
-                    }
-                }
-            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
         }
     }
 
     public function userInfo($userID)
     {
-        $query = "SELECT * FROM `users` WHERE idUser = '$userID'";
-        $result = $this->db->select($query);
+        try {
+            $query = "SELECT * FROM `users` WHERE idUser = '$userID'";
+            $result = $this->db->select($query);
 
-        return $result;
+            return $result;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     // public function updateUserAvatar($userID, $avatarName, $updateAt)
@@ -152,36 +164,40 @@ class userManagement
         $name = mysqli_real_escape_string($this->db->link, $name);
         $phoneNumber = mysqli_real_escape_string($this->db->link, $phoneNumber);
 
-        if ($phoneNumber != NULL) {
-            if (strlen($phoneNumber) < 9 || strlen($phoneNumber) > 10) {
-                $msg = "<span class='text-danger'>The phone number must be from 9 to 10 numbers!</span>";
-                return $msg;
-            } elseif (!filter_var($phoneNumber, FILTER_SANITIZE_NUMBER_INT)) {
-                $msg = "<span class='text-danger'>The phone number must be the number!</span>";
-                return $msg;
-            }
+        try {
+            if ($phoneNumber != NULL) {
+                if (strlen($phoneNumber) < 9 || strlen($phoneNumber) > 10) {
+                    $msg = "<span class='text-danger'>The phone number must be from 9 to 10 numbers!</span>";
+                    return $msg;
+                } elseif (!filter_var($phoneNumber, FILTER_SANITIZE_NUMBER_INT)) {
+                    $msg = "<span class='text-danger'>The phone number must be the number!</span>";
+                    return $msg;
+                }
 
-            $queryEdit = "UPDATE `users` SET `name`='$name',`phoneNumber`='$phoneNumber',`idRole`= '$idRole', `updateAt`='$updateAt' WHERE `idUser`='$userID'";
-            $result = $this->db->insert($queryEdit);
+                $queryEdit = "UPDATE `users` SET `name`='$name',`phoneNumber`='$phoneNumber',`idRole`= '$idRole', `updateAt`='$updateAt' WHERE `idUser`='$userID'";
+                $result = $this->db->insert($queryEdit);
 
-            if ($result != false) {
-                $msg = "<span class='text-success'>Update user Successfully!</span>";
-                return $msg;
+                if ($result != false) {
+                    $msg = "<span class='text-success'>Update user Successfully!</span>";
+                    return $msg;
+                } else {
+                    $msg = "<span class='text-success'>Update user fail!</span>";
+                    return $msg;
+                }
             } else {
-                $msg = "<span class='text-success'>Update user fail!</span>";
-                return $msg;
-            }
-        } else {
-            $queryEdit = "UPDATE `users` SET `name`='$name',`idRole`= '$idRole', `updateAt`='$updateAt' WHERE `idUser`='$userID'";
-            $result = $this->db->insert($queryEdit);
+                $queryEdit = "UPDATE `users` SET `name`='$name',`idRole`= '$idRole', `updateAt`='$updateAt' WHERE `idUser`='$userID'";
+                $result = $this->db->insert($queryEdit);
 
-            if ($result != false) {
-                $msg = "<span class='text-success'>Update info user Successfully!</span>";
-                return $msg;
-            } else {
-                $msg = "<span class='text-success'>Update info user fail!</span>";
-                return $msg;
+                if ($result != false) {
+                    $msg = "<span class='text-success'>Update info user Successfully!</span>";
+                    return $msg;
+                } else {
+                    $msg = "<span class='text-success'>Update info user fail!</span>";
+                    return $msg;
+                }
             }
+        } catch (Exception $e) {
+            echo $e->getMessage();
         }
     }
 
@@ -190,75 +206,96 @@ class userManagement
         $newPassword = $this->format->validate($newPassword);
         $rePassword = $this->format->validate($rePassword);
 
-        if ($newPassword == '') {
-            $msg = "<span class='text-danger'>No empty!</span>";
-            return $msg;
-        }
-
-        if ($newPassword != $rePassword) {
-            $msg = "<span class='text-danger'>The retype password not match!</span>";
-            return $msg;
-        }
-
         $uppercase = preg_match('@[A-Z]@', $newPassword);
         $lowercase = preg_match('@[a-z]@', $newPassword);
         $number    = preg_match('@[0-9]@', $newPassword);
         $specialChars = preg_match('@[^\w]@', $newPassword);
 
-        if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($newPassword) < 8) {
-            $msg = "<span class='text-danger'>Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character!</span>";
-            return $msg;
-        } else {
-            $newPassword = md5($newPassword);
-            $query = "UPDATE users SET password='$newPassword',  updateAt='$updateAt' WHERE idUser='$userID'";
-            $result = $this->db->upadte($query);
-
-            if ($result != false) {
-                $msg = "<span class='text-success'>Change password Successfully!</span>";
-                return $msg;
-            } else {
-                $msg = "<span class='text-danger'>Change password fail!</span>";
+        try {
+            if ($newPassword == '') {
+                $msg = "<span class='text-danger'>No empty!</span>";
                 return $msg;
             }
+
+            if ($newPassword != $rePassword) {
+                $msg = "<span class='text-danger'>The retype password not match!</span>";
+                return $msg;
+            }
+
+
+            if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($newPassword) < 8) {
+                $msg = "<span class='text-danger'>Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character!</span>";
+                return $msg;
+            } else {
+                $newPassword = md5($newPassword);
+                $query = "UPDATE users SET password='$newPassword',  updateAt='$updateAt' WHERE idUser='$userID'";
+                $result = $this->db->upadte($query);
+
+                if ($result != false) {
+                    $msg = "<span class='text-success'>Change password Successfully!</span>";
+                    return $msg;
+                } else {
+                    $msg = "<span class='text-danger'>Change password fail!</span>";
+                    return $msg;
+                }
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
         }
     }
 
     public function delUser($userID)
     {
-        $query = "DELETE FROM `users` WHERE idUser = '$userID'";
-        $result = $this->db->delete($query);
+        try {
+            $query = "DELETE FROM `users` WHERE idUser = '$userID'";
+            $result = $this->db->delete($query);
 
-        if ($result != false) {
-            $msg = "<span class='text-success'>Delete User Successfully!</span>";
-            return $msg;
-        } else {
-            $msg = "<span class='text-danger'>Delete User Successfully!</span>";
-            return $msg;
+            if ($result != false) {
+                $msg = "<span class='text-success'>Delete User Successfully!</span>";
+                return $msg;
+            } else {
+                $msg = "<span class='text-danger'>Delete User Successfully!</span>";
+                return $msg;
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
         }
     }
 
     public function getListRole()
     {
-        $query = "SELECT * FROM `roles`";
-        $result = $this->db->select($query);
+        try {
+            $query = "SELECT * FROM `roles`";
+            $result = $this->db->select($query);
 
-        return $result;
+            return $result;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     // paginate
     public function countUsers()
     {
-        $query = "SELECT count(*) as total FROM users";
-        $result = $this->db->select($query);
+        try {
+            $query = "SELECT count(*) as total FROM users";
+            $result = $this->db->select($query);
 
-        return $result;
+            return $result;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function startEnd($start, $limit)
     {
-        $query = "SELECT * FROM users, roles WHERE users.idRole = roles.idRole ORDER BY idUser LIMIT $start, $limit";
-        $result = $this->db->select($query);
+        try {
+            $query = "SELECT * FROM users, roles WHERE users.idRole = roles.idRole ORDER BY idUser LIMIT $start, $limit";
+            $result = $this->db->select($query);
 
-        return $result;
+            return $result;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 }
