@@ -123,25 +123,25 @@ class userManagement
         return $result;
     }
 
-    public function updateUserAvatar($userID, $avatarName, $updateAt)
-    {
-        $fileType = strtolower(pathinfo($avatarName, PATHINFO_EXTENSION));
-        $hashAvatarName = md5(strtotime(date('Y-m-d H:i:s'))) . "." . $fileType;
-        $avatarPath = "../../assets/img/avatar/" . $hashAvatarName;
-        move_uploaded_file($_FILES["avatar"]["tmp_name"], $avatarPath);
+    // public function updateUserAvatar($userID, $avatarName, $updateAt)
+    // {
+    //     $fileType = strtolower(pathinfo($avatarName, PATHINFO_EXTENSION));
+    //     $hashAvatarName = md5(strtotime(date('Y-m-d H:i:s'))) . "." . $fileType;
+    //     $avatarPath = "../../assets/img/avatar/" . $hashAvatarName;
+    //     move_uploaded_file($_FILES["avatar"]["tmp_name"], $avatarPath);
 
 
-        $queryEdit = "UPDATE `users` SET `avatar`='$hashAvatarName',`updateAt`='$updateAt' WHERE `idUser`='$userID'";
-        $result = $this->db->insert($queryEdit);
+    //     $queryEdit = "UPDATE `users` SET `avatar`='$hashAvatarName',`updateAt`='$updateAt' WHERE `idUser`='$userID'";
+    //     $result = $this->db->insert($queryEdit);
 
-        if ($result != false) {
-            $msg = "<span class='text-success'>Update avatar user Successfully!</span>";
-            return $msg;
-        } else {
-            $msg = "<span class='text-success'>Update avatar user fail!</span>";
-            return $msg;
-        }
-    }
+    //     if ($result != false) {
+    //         $msg = "<span class='text-success'>Update avatar user Successfully!</span>";
+    //         return $msg;
+    //     } else {
+    //         $msg = "<span class='text-success'>Update avatar user fail!</span>";
+    //         return $msg;
+    //     }
+    // }
 
     public function updateUserInfo($userID, $name, $phoneNumber, $idRole,  $updateAt)
     {
