@@ -123,16 +123,31 @@ class userManagement
         return $result;
     }
 
-    public function updateUser($userID, $name, $phoneNumber, $idRole, $avatarName, $updateAt)
+    public function updateUserAvatar($userID, $avatarName, $updateAt)
     {
-        $name = $this->format->validate($name);
-        $phoneNumber = $this->format->validate($phoneNumber);
-        $idRole = $this->format->validate($idRole);
-
         $fileType = strtolower(pathinfo($avatarName, PATHINFO_EXTENSION));
         $hashAvatarName = md5(strtotime(date('Y-m-d H:i:s'))) . "." . $fileType;
         $avatarPath = "../../assets/img/avatar/" . $hashAvatarName;
         move_uploaded_file($_FILES["avatar"]["tmp_name"], $avatarPath);
+
+
+        $queryEdit = "UPDATE `users` SET `avatar`='$hashAvatarName',`updateAt`='$updateAt' WHERE `idUser`='$userID'";
+        $result = $this->db->insert($queryEdit);
+
+        if ($result != false) {
+            $msg = "<span class='text-success'>Update avatar user Successfully!</span>";
+            return $msg;
+        } else {
+            $msg = "<span class='text-success'>Update avatar user fail!</span>";
+            return $msg;
+        }
+    }
+
+    public function updateUserInfo($userID, $name, $phoneNumber, $idRole,  $updateAt)
+    {
+        $name = $this->format->validate($name);
+        $phoneNumber = $this->format->validate($phoneNumber);
+        $idRole = $this->format->validate($idRole);
 
         $name = mysqli_real_escape_string($this->db->link, $name);
         $phoneNumber = mysqli_real_escape_string($this->db->link, $phoneNumber);
@@ -146,7 +161,7 @@ class userManagement
                 return $msg;
             }
 
-            $queryEdit = "UPDATE `users` SET `name`='$name',`phoneNumber`='$phoneNumber',`avatar`='$hashAvatarName', `idRole`= '$idRole', `updateAt`='$updateAt' WHERE `idUser`='$userID'";
+            $queryEdit = "UPDATE `users` SET `name`='$name',`phoneNumber`='$phoneNumber',`idRole`= '$idRole', `updateAt`='$updateAt' WHERE `idUser`='$userID'";
             $result = $this->db->insert($queryEdit);
 
             if ($result != false) {
@@ -157,14 +172,14 @@ class userManagement
                 return $msg;
             }
         } else {
-            $queryEdit = "UPDATE `users` SET `name`='$name',`avatar`='$hashAvatarName', `idRole`= '$idRole', `updateAt`='$updateAt' WHERE `idUser`='$userID'";
+            $queryEdit = "UPDATE `users` SET `name`='$name',`idRole`= '$idRole', `updateAt`='$updateAt' WHERE `idUser`='$userID'";
             $result = $this->db->insert($queryEdit);
 
             if ($result != false) {
-                $msg = "<span class='text-success'>Update user Successfully!</span>";
+                $msg = "<span class='text-success'>Update info user Successfully!</span>";
                 return $msg;
             } else {
-                $msg = "<span class='text-success'>Update user fail!</span>";
+                $msg = "<span class='text-success'>Update info user fail!</span>";
                 return $msg;
             }
         }

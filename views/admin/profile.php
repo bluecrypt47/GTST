@@ -8,18 +8,19 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
 $class = new updateProfile();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-
     $idUser = Session::get('idUser');
-
-    $name = $_POST['name'];
-    $phoneNumber = $_POST['phoneNumber'];
     $updateAt = date("Y-m-d H:i:s");
 
-    $avatarName = basename($_FILES['avatar']['name']);
+    if ($_POST['form_type'] == 'avatar') {
+        $avatarName = basename($_FILES['avatar']['name']);
 
+        $checkUpdate = $class->updateAvatar($idUser, $avatarName, $updateAt);
+    } else {
+        $name = $_POST['name'];
+        $phoneNumber = $_POST['phoneNumber'];
 
-    $checkUpdate = $class->update($idUser, $name,  $phoneNumber, $avatarName, $updateAt);
+        $checkUpdate = $class->updateInfo($idUser, $name, $phoneNumber, $updateAt);
+    }
 }
 
 ?>
@@ -42,13 +43,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="col-lg-12">
                     <div class="p-10">
                         <form method="post" action="profile.php" class="user" enctype="multipart/form-data">
-                            <div class="form-group row">
-                                <div class="col-sm-3 mb-3 mb-sm-0">
+                            <div class="form-group row" style="text-align: center;">
+                                <input type="hidden" name="form_type" value="avatar">
+                                <div class="col-sm-6">
                                     <img src="../../assets/img/avatar/<?php echo Session::get('avatar'); ?>" class="rounded mx-auto d-block" alt="Avatar" style="width:300px;height:300px;">
                                     <label>Avatar<label style="color: red;">*</label></label>
                                     <input class="rounded mx-auto" type="file" name="avatar">
                                 </div>
+                                <div class="col-sm-6" style="margin-top: 12%;">
+                                    <input type="submit" name="update" value="Update avatar" class="btn btn-primary btn-user btn-block" />
+                                </div>
                             </div>
+                        </form>
+                        <form method="post" action="profile.php" class="user" enctype="multipart/form-data">
+                            <input type="hidden" name="form_type" value="info">
                             <div class="form-group row">
                                 <div class="col-sm-4 mb-3 mb-sm-0">
                                     <label>Email<label style="color: red;">*</label></label>

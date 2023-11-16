@@ -14,14 +14,23 @@ if (!isset($_GET['UserID']) || $_GET['UserID'] == NULL) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userID = $_GET['UserID'];
-    $name = $_POST['name'];
-    $phoneNumber = $_POST['phoneNumber'];
-    $idRole = $_POST['idRole'];
     $updateAt = date("Y-m-d H:i:s");
 
-    $avatarName = basename($_FILES['avatar']['name']);
+    if ($_POST['form_type'] == 'avatar') {
+        if (!isset($avatarName)) {
+            echo "null";
+        } else {
+            $avatarName = basename($_FILES['avatar']['name']);
 
-    $checkInfo = $users->updateUser($userID, $name, $phoneNumber, $idRole, $avatarName, $updateAt);
+            $checkUpdate = $class->updateUserAvatar($userID, $avatarName, $updateAt);
+        }
+    } else {
+        $name = $_POST['name'];
+        $phoneNumber = $_POST['phoneNumber'];
+        $idRole = $_POST['idRole'];
+
+        $checkInfo = $users->updateUserInfo($userID, $name, $phoneNumber, $idRole, $updateAt);
+    }
 }
 
 ?>
@@ -49,13 +58,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             while ($row = $getUser->fetch_assoc()) {
                         ?>
                                 <form method="post" action="<?php echo htmlspecialchars(basename($_SERVER['REQUEST_URI'])); ?>" class="user" enctype="multipart/form-data">
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                    <div class="form-group row" style="text-align: center;">
+                                        <input type="hidden" name="form_type" value="avatar">
+                                        <div class="col-sm-6">
                                             <img src="../../assets/img/avatar/<?php echo $row['avatar']; ?>" class="rounded mx-auto d-block" alt="Avatar" style="width:300px;height:300px;">
                                             <label>Avatar<label style="color: red;">*</label></label>
                                             <input class="rounded mx-auto" type="file" name="avatar">
                                         </div>
+                                        <div class="col-sm-6" style="margin-top: 12%;">
+                                            <input type="submit" name="update" value="Update avatar" class="btn btn-primary btn-user btn-block" />
+                                        </div>
                                     </div>
+                                </form>
+
+                                <form method="post" action="<?php echo htmlspecialchars(basename($_SERVER['REQUEST_URI'])); ?>" class="user" enctype="multipart/form-data">
+                                    <input type="hidden" name="form_type" value="info">
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <label>Username<label style="color: red;">*</label></label>
@@ -99,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <a class="btn btn-success btn-user btn-block" href="userList.php"><i class="fas fa-caret-left"></i> Back</a>
                                         </div>
                                         <div class="col-sm-6">
-                                            <input type="submit" name="create" value="Update User" class="btn btn-primary btn-user btn-block" />
+                                            <input type="submit" name="update" value="Update User" class="btn btn-primary btn-user btn-block" />
                                         </div>
                                     </div>
                                 </form>
