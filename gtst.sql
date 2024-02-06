@@ -2,10 +2,10 @@
 -- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th4 29, 2023 lúc 09:50 AM
--- Phiên bản máy phục vụ: 10.4.22-MariaDB
--- Phiên bản PHP: 7.4.27
+-- Host: 127.0.0.1
+-- Generation Time: Jan 28, 2024 at 01:05 PM
+-- Server version: 10.4.22-MariaDB
+-- PHP Version: 7.4.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,19 +18,19 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Cơ sở dữ liệu: `gtst`
+-- Database: `gtst`
 --
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `products`
+-- Table structure for table `products`
 --
 
 CREATE TABLE `products` (
   `idProduct` int(11) NOT NULL,
   `idProductType` int(11) NOT NULL,
-  `nameProductType` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nameProduct` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `description` varchar(1000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` bigint(20) NOT NULL DEFAULT 0,
@@ -40,10 +40,18 @@ CREATE TABLE `products` (
   `updateAtProduct` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`idProduct`, `idProductType`, `nameProduct`, `image`, `description`, `price`, `quantity`, `unit`, `createAtProduct`, `updateAtProduct`) VALUES
+(1, 1, 'Bánh', 'd5c38f64679fa5eac5caf02599eb0a36.jpg', '', 10000, 20, 'Cái', '2023-11-16 17:45:54', '2023-11-16 18:14:36'),
+(2, 2, 'Kẹo', '584853c4e18bd2ec591adb5ec1b5e77f.jpg', '', 10000, 2, 'Cái', '2023-11-16 17:48:54', '2023-11-16 18:14:50');
+
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `producttypes`
+-- Table structure for table `producttypes`
 --
 
 CREATE TABLE `producttypes` (
@@ -53,10 +61,19 @@ CREATE TABLE `producttypes` (
   `updateAtProType` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `producttypes`
+--
+
+INSERT INTO `producttypes` (`idProductType`, `nameProductType`, `createAtProType`, `updateAtProType`) VALUES
+(1, 'Bánh', '2023-11-16 17:37:28', '2023-11-16 17:37:28'),
+(2, 'Kẹo', '2023-11-16 17:57:04', '2023-11-16 17:57:04'),
+(3, 'Bim bim', '2023-11-16 17:57:51', '2023-11-16 18:14:19');
+
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `roles`
+-- Table structure for table `roles`
 --
 
 CREATE TABLE `roles` (
@@ -67,19 +84,18 @@ CREATE TABLE `roles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `roles`
+-- Dumping data for table `roles`
 --
 
 INSERT INTO `roles` (`idRole`, `nameRole`, `createAtRole`, `updateAtRole`) VALUES
 (1, 'Administrator', '2023-04-12 00:00:00', '2023-04-12 00:00:00'),
 (2, 'User', '2023-04-12 00:00:00', '2023-04-12 00:00:00'),
-(5, 'test', '2023-04-27 11:28:10', '2023-04-27 11:28:10'),
-(6, 'asd', '2023-04-27 11:28:10', '2023-04-27 11:28:10');
+(5, 'test', '2023-04-27 11:28:10', '2023-04-27 11:28:10');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -96,74 +112,45 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`idUser`, `idRole`, `name`, `email`, `phoneNumber`, `username`, `password`, `avatar`, `createAt`, `updateAt`) VALUES
-(1, 1, 'Administrators', 'admin@gmail.com', '', 'admin', '538d598f97cc42ab6669d5038283106b', 'abcb56bdc80388583afc15efe85a5f99.jpg', '2023-04-12 00:00:00', '2023-04-23 07:46:07'),
+(1, 1, 'Administrators', 'admin@gmail.com', '', 'admin', '538d598f97cc42ab6669d5038283106b', 'a13939f48a7832dc9a887c98b659f58d.jpg', '2023-04-12 00:00:00', '2023-11-16 22:36:46'),
 (2, 2, 'User', 'user@gmail.com', '0126483920', 'user', '538d598f97cc42ab6669d5038283106b', 'da100700eb7e070324707b8e41dc7242.gif', '2023-04-12 00:00:00', '2023-04-23 07:45:45'),
-(3, 2, 'Blue', 'blue@gmail.com', '0123456789', 'blue', '538d598f97cc42ab6669d5038283106b', 'e33b49d9ca7f08bd5614db2c6d5e5089.jpg', '2023-04-21 00:00:00', '2023-04-23 07:45:55');
+(3, 2, 'Blue', 'blue@gmail.com', '0123456789', 'blue', '538d598f97cc42ab6669d5038283106b', 'e33b49d9ca7f08bd5614db2c6d5e5089.jpg', '2023-04-21 00:00:00', '2023-11-16 20:43:23');
 
 --
--- Chỉ mục cho các bảng đã đổ
+-- Indexes for dumped tables
 --
 
 --
--- Chỉ mục cho bảng `products`
+-- Indexes for table `products`
 --
 ALTER TABLE `products`
-  ADD PRIMARY KEY (`idProduct`),
-  ADD KEY `idProductType` (`idProductType`),
+  ADD PRIMARY KEY (`idProduct`);
 
 --
--- Chỉ mục cho bảng `producttypes`
+-- Indexes for table `producttypes`
 --
 ALTER TABLE `producttypes`
   ADD PRIMARY KEY (`idProductType`);
 
 --
--- Chỉ mục cho bảng `roles`
---
-ALTER TABLE `roles`
-  ADD PRIMARY KEY (`idRole`),
-  ADD UNIQUE KEY `nameRole` (`nameRole`);
-
---
--- Chỉ mục cho bảng `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`idUser`),
-  ADD UNIQUE KEY `username` (`username`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `idRole` (`idRole`);
-
---
--- AUTO_INCREMENT cho các bảng đã đổ
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT cho bảng `products`
+-- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `idProduct` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idProduct` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT cho bảng `producttypes`
+-- AUTO_INCREMENT for table `producttypes`
 --
 ALTER TABLE `producttypes`
-  MODIFY `idProductType` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT cho bảng `roles`
---
-ALTER TABLE `roles`
-  MODIFY `idRole` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT cho bảng `users`
---
-ALTER TABLE `users`
-  MODIFY `idUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idProductType` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

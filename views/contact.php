@@ -22,8 +22,8 @@ include("$_SERVER[DOCUMENT_ROOT]/GTST/views/layouts/client/header.php");
                 <div class="contact-info">
                     <h2>Văn Phòng</h2>
                     <h3><i class="fa fa-map-marker"></i>Khu Công Nghệ Cao Hutech, Q.9, TP.HCM</h3>
-                    <h3><i class="fa fa-envelope"></i>thanhhung041100@gmail.com</h3>
-                    <h3><i class="fa fa-phone"></i>+078-3727-238</h3>
+                    <h3><i class="fa fa-envelope"></i>ltvcblue@gmail.com</h3>
+                    <h3><i class="fa fa-phone"></i>012-3456-789</h3>
                     <div class="social">
                         <a href=""><i class="fab fa-twitter"></i></a>
                         <a href=""><i class="fab fa-facebook-f"></i></a>
@@ -37,8 +37,8 @@ include("$_SERVER[DOCUMENT_ROOT]/GTST/views/layouts/client/header.php");
                 <div class="contact-info">
                     <h2>Cửa Hàng</h2>
                     <h3><i class="fa fa-map-marker"></i>Khu Công Nghệ Cao Hutech, Q.9, TP.HCM</h3>
-                    <h3><i class="fa fa-envelope"></i>thanhhung041100@gmail.com</h3>
-                    <h3><i class="fa fa-phone"></i>+078-3727-238</h3>
+                    <h3><i class="fa fa-envelope"></i>ltvcblue@gmail.com</h3>
+                    <h3><i class="fa fa-phone"></i>012-3456-789</h3>
                     <div class="social">
                         <a href=""><i class="fab fa-twitter"></i></a>
                         <a href=""><i class="fab fa-facebook-f"></i></a>
