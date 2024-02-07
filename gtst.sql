@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 28, 2024 at 01:05 PM
+-- Generation Time: Feb 07, 2024 at 04:34 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.27
 
@@ -36,6 +36,8 @@ CREATE TABLE `products` (
   `price` bigint(20) NOT NULL DEFAULT 0,
   `quantity` int(11) NOT NULL DEFAULT 0,
   `unit` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Cái',
+  `highlightProduct` tinyint(1) NOT NULL DEFAULT 0,
+  `newProduct` tinyint(1) NOT NULL DEFAULT 1,
   `createAtProduct` datetime NOT NULL DEFAULT current_timestamp(),
   `updateAtProduct` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -44,9 +46,12 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`idProduct`, `idProductType`, `nameProduct`, `image`, `description`, `price`, `quantity`, `unit`, `createAtProduct`, `updateAtProduct`) VALUES
-(1, 1, 'Bánh', 'd5c38f64679fa5eac5caf02599eb0a36.jpg', '', 10000, 20, 'Cái', '2023-11-16 17:45:54', '2023-11-16 18:14:36'),
-(2, 2, 'Kẹo', '584853c4e18bd2ec591adb5ec1b5e77f.jpg', '', 10000, 2, 'Cái', '2023-11-16 17:48:54', '2023-11-16 18:14:50');
+INSERT INTO `products` (`idProduct`, `idProductType`, `nameProduct`, `image`, `description`, `price`, `quantity`, `unit`, `highlightProduct`, `newProduct`, `createAtProduct`, `updateAtProduct`) VALUES
+(1, 1, 'Bánh', 'd5c38f64679fa5eac5caf02599eb0a36.jpg', '', 10000, 20, 'Cái', 1, 1, '2023-11-16 17:45:54', '2023-11-16 18:14:36'),
+(2, 2, 'Kẹo', '584853c4e18bd2ec591adb5ec1b5e77f.jpg', '', 10000, 2, 'Cái', 1, 1, '2023-11-16 17:48:54', '2023-11-16 18:14:50'),
+(3, 1, 'Bánh 2', '56692797a03b1671e343598ef5de59e8.jpg', 'Bánh 2', 11000, 3, '', 1, 1, '2024-02-06 15:49:47', '2024-02-06 15:49:47'),
+(4, 1, 'Bánh 3', '2b8fb91173c99d6ba6eb9126ce15c86d.jpg', 'Bánh 3', 13000, 3, 'Cái', 1, 1, '2024-02-06 15:51:35', '2024-02-06 15:51:35'),
+(5, 1, 'Bánh 4', '8107bb010a6076bfce258187f0042e4e.jpg', 'Bánh 4', 14000, 3, 'Cái', 1, 1, '2024-02-06 15:51:53', '2024-02-06 15:51:53');
 
 -- --------------------------------------------------------
 
@@ -144,7 +149,7 @@ ALTER TABLE `producttypes`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `idProduct` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idProduct` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `producttypes`
