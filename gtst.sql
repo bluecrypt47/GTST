@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 07, 2024 at 04:34 AM
+-- Generation Time: Feb 07, 2024 at 09:07 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.27
 
@@ -20,6 +20,40 @@ SET time_zone = "+00:00";
 --
 -- Database: `gtst`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order`
+--
+
+CREATE TABLE `order` (
+  `idOrder` int(11) NOT NULL,
+  `idUser` int(11) NOT NULL,
+  `nameCustomer` varchar(30) NOT NULL,
+  `phoneNumberCustomer` varchar(11) NOT NULL,
+  `addressCustomer` varchar(255) NOT NULL,
+  `noteCustomer` text NOT NULL,
+  `total` bigint(20) NOT NULL,
+  `createAtTime` datetime NOT NULL DEFAULT current_timestamp(),
+  `updateAtTime` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orderdetail`
+--
+
+CREATE TABLE `orderdetail` (
+  `idOrderDetail` int(11) NOT NULL,
+  `idOrder` int(11) NOT NULL,
+  `idProduct` int(11) NOT NULL,
+  `price` bigint(20) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `createAt` datetime NOT NULL DEFAULT current_timestamp(),
+  `updateAt` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -130,10 +164,28 @@ INSERT INTO `users` (`idUser`, `idRole`, `name`, `email`, `phoneNumber`, `userna
 --
 
 --
+-- Indexes for table `order`
+--
+ALTER TABLE `order`
+  ADD PRIMARY KEY (`idOrder`),
+  ADD KEY `idUser` (`idUser`);
+
+--
+-- Indexes for table `orderdetail`
+--
+ALTER TABLE `orderdetail`
+  ADD PRIMARY KEY (`idOrderDetail`),
+  ADD UNIQUE KEY `idOrder_2` (`idOrder`),
+  ADD KEY `idOrder` (`idOrder`),
+  ADD KEY `idProduct` (`idProduct`),
+  ADD KEY `idOrder_3` (`idOrder`);
+
+--
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
-  ADD PRIMARY KEY (`idProduct`);
+  ADD PRIMARY KEY (`idProduct`),
+  ADD KEY `idProductType` (`idProductType`);
 
 --
 -- Indexes for table `producttypes`
@@ -142,8 +194,33 @@ ALTER TABLE `producttypes`
   ADD PRIMARY KEY (`idProductType`);
 
 --
+-- Indexes for table `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`idRole`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`idUser`),
+  ADD KEY `idRole` (`idRole`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `order`
+--
+ALTER TABLE `order`
+  MODIFY `idOrder` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `orderdetail`
+--
+ALTER TABLE `orderdetail`
+  MODIFY `idOrderDetail` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -156,6 +233,41 @@ ALTER TABLE `products`
 --
 ALTER TABLE `producttypes`
   MODIFY `idProductType` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `idUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `order`
+--
+ALTER TABLE `order`
+  ADD CONSTRAINT `idUser` FOREIGN KEY (`idUser`) REFERENCES `users` (`idUser`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `orderdetail`
+--
+ALTER TABLE `orderdetail`
+  ADD CONSTRAINT `idOrder` FOREIGN KEY (`idOrder`) REFERENCES `order` (`idOrder`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `idProduct` FOREIGN KEY (`idProduct`) REFERENCES `products` (`idProduct`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `products`
+--
+ALTER TABLE `products`
+  ADD CONSTRAINT `idProductType` FOREIGN KEY (`idProductType`) REFERENCES `producttypes` (`idProductType`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `idRole` FOREIGN KEY (`idRole`) REFERENCES `roles` (`idRole`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

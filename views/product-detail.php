@@ -2,8 +2,10 @@
 include("$_SERVER[DOCUMENT_ROOT]/GTST/lib/session.php");
 include("$_SERVER[DOCUMENT_ROOT]/GTST/views/layouts/client/header.php");
 include("$_SERVER[DOCUMENT_ROOT]/GTST/model/client/products.php");
+include("$_SERVER[DOCUMENT_ROOT]/GTST/model/client/carts.php");
 
 $products = new products();
+$carts = new carts();
 
 
 if (!isset($_GET['ID']) || $_GET['ID'] == NULL) {
@@ -13,6 +15,15 @@ if (!isset($_GET['ID']) || $_GET['ID'] == NULL) {
 }
 
 $idType = null;
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
+    $quantity = $_POST['quantity'];
+
+
+    $addToCart = $carts->addToCart($productID, $quantity);
+}
+
+
 ?>
 <!-- Bottom Bar End -->
 
@@ -62,18 +73,21 @@ $idType = null;
                                             <h4>Price:</h4>
                                             <p><?php echo number_format($row['price']); ?> đ</p>
                                         </div>
-                                        <div class="quantity">
-                                            <h4>Quantity:</h4>
-                                            <div class="qty">
-                                                <button class="btn-minus"><i class="fa fa-minus"></i></button>
-                                                <input type="text" value="1">
-                                                <button class="btn-plus"><i class="fa fa-plus"></i></button>
+                                        <form action="" method="POST">
+                                            <div class="quantity">
+                                                <h4>Quantity:</h4>
+                                                <div class="qty">
+                                                    <button class="btn-minus"><i class="fa fa-minus"></i></button>
+                                                    <input type="text" value="1" name="quantity" min=1>
+                                                    <button class="btn-plus"><i class="fa fa-plus"></i></button>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="action">
-                                            <a class="btn" href="#"><i class="fa fa-shopping-cart"></i>Add to Cart</a>
-                                            <a class="btn" href="#"><i class="fa fa-shopping-bag"></i>Buy Now</a>
-                                        </div>
+                                            <div class="action">
+                                                <!-- <a class="btn" href="#"><i class="fa fa-shopping-cart"></i>Add to Cart</a>
+                                                <a class="btn" href="#"><i class="fa fa-shopping-bag"></i>Buy Now</a> -->
+                                                <input class="btn" value="Buy Now" name="submit"></input>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                     </div>
@@ -216,17 +230,6 @@ $idType = null;
                     </div>
                 </div>
 
-                <div class="sidebar-widget brands">
-                    <h2 class="title">Our Brands</h2>
-                    <ul>
-                        <li><a href="#">Nulla </a><span>(45)</span></li>
-                        <li><a href="#">Curabitur </a><span>(34)</span></li>
-                        <li><a href="#">Nunc </a><span>(67)</span></li>
-                        <li><a href="#">Ullamcorper</a><span>(74)</span></li>
-                        <li><a href="#">Fusce </a><span>(89)</span></li>
-                        <li><a href="#">Sagittis</a><span>(28)</span></li>
-                    </ul>
-                </div>
             </div>
             <!-- Side Bar End -->
         </div>
